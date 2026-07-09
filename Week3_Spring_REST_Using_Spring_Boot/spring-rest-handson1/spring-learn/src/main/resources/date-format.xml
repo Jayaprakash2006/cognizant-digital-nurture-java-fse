@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring XML Configuration – Hands On 2
+    Defines a SimpleDateFormat bean with the pattern 'dd/MM/yyyy'
+    so it can be retrieved via ApplicationContext.getBean() instead
+    of being instantiated in multiple places throughout the application.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        id       : logical name used with context.getBean("dateFormat", ...)
+        class    : fully-qualified class name of java.text.SimpleDateFormat
+        constructor-arg : passes the format pattern to the single-arg constructor
+    -->
+    <bean id="dateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg value="dd/MM/yyyy" />
+    </bean>
+
+</beans>
