@@ -1,0 +1,11 @@
+<!-- Hands-On 1 Task 2 — Root App Template -->
+<!--
+  <app-header> renders the HeaderComponent navigation bar on every page.
+  <router-outlet> is Angular's dynamic placeholder — the active route's component
+  is rendered here. When the user navigates to /courses, CourseListComponent
+  replaces this slot. When they go to /, HomeComponent is rendered, etc.
+-->
+<app-header></app-header>
+<main>
+  <router-outlet></router-outlet>
+</main>

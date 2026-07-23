@@ -1,0 +1,177 @@
+<!-- Hands-On 4 — Template-Driven Enrollment Form -->
+
+<div class="form-container">
+  <h2>Enrollment Request</h2>
+  <p class="subtitle">Fill in your details to request course enrollment.</p>
+
+  <!--
+    #enrollForm="ngForm" — creates a template reference variable bound to NgForm.
+    This gives us access to enrollForm.valid, enrollForm.value, enrollForm.resetForm()
+    throughout the template.
+    (ngSubmit)="onSubmit(enrollForm)" — fires when the form is submitted
+    (either by clicking the submit button or pressing Enter).
+  -->
+  <form #enrollForm="ngForm" (ngSubmit)="onSubmit(enrollForm)" novalidate>
+
+    <!-- ── Student Name ── -->
+    <div class="form-group">
+      <label for="studentName">Student Name <span class="required">*</span></label>
+      <!--
+        [(ngModel)]="formModel.studentName" — two-way binding keeps model in sync.
+        name="studentName"                  — REQUIRED; Angular uses it as the key in form.value.
+        #nameCtrl="ngModel"                 — template ref to this control's NgModel instance.
+        required, minlength="3"             — built-in HTML5 validators; Angular picks these up.
+      -->
+      <input
+        id="studentName"
+        type="text"
+        name="studentName"
+        [(ngModel)]="formModel.studentName"
+        #nameCtrl="ngModel"
+        required
+        minlength="3"
+        placeholder="e.g. Alex Johnson"
+        class="form-control"
+        aria-describedby="nameErrors"
+      />
+      <!--
+        Error messages use nameCtrl.touched (not .dirty) — errors only show after
+        the user has focused and left the field, avoiding premature red borders.
+      -->
+      <div id="nameErrors" class="error-messages" aria-live="polite">
+        @if (nameCtrl.touched && nameCtrl.errors?.['required']) {
+          <span class="error">Name is required.</span>
+        }
+        @if (nameCtrl.touched && nameCtrl.errors?.['minlength']) {
+          <span class="error">Name must be at least 3 characters.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Student Email ── -->
+    <div class="form-group">
+      <label for="studentEmail">Email Address <span class="required">*</span></label>
+      <input
+        id="studentEmail"
+        type="email"
+        name="studentEmail"
+        [(ngModel)]="formModel.studentEmail"
+        #emailCtrl="ngModel"
+        required
+        email
+        placeholder="e.g. alex@college.edu"
+        class="form-control"
+        aria-describedby="emailErrors"
+      />
+      <div id="emailErrors" class="error-messages" aria-live="polite">
+        @if (emailCtrl.touched && emailCtrl.errors?.['required']) {
+          <span class="error">Email is required.</span>
+        }
+        @if (emailCtrl.touched && emailCtrl.errors?.['email']) {
+          <span class="error">Please enter a valid email address.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Course ID ── -->
+    <div class="form-group">
+      <label for="courseId">Course Code <span class="required">*</span></label>
+      <input
+        id="courseId"
+        type="text"
+        name="courseId"
+        [(ngModel)]="formModel.courseId"
+        #courseCtrl="ngModel"
+        required
+        placeholder="e.g. CS101"
+        class="form-control"
+        aria-describedby="courseErrors"
+      />
+      <div id="courseErrors" class="error-messages" aria-live="polite">
+        @if (courseCtrl.touched && courseCtrl.errors?.['required']) {
+          <span class="error">Course code is required.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Preferred Semester ── -->
+    <div class="form-group">
+      <label for="preferredSemester">Preferred Semester <span class="required">*</span></label>
+      <select
+        id="preferredSemester"
+        name="preferredSemester"
+        [(ngModel)]="formModel.preferredSemester"
+        #semesterCtrl="ngModel"
+        required
+        class="form-control"
+      >
+        <option value="">-- Select Semester --</option>
+        <option value="Odd">Odd</option>
+        <option value="Even">Even</option>
+      </select>
+      <div class="error-messages" aria-live="polite">
+        @if (semesterCtrl.touched && semesterCtrl.errors?.['required']) {
+          <span class="error">Please select a semester.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Agree to Terms checkbox ── -->
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          name="agreeToTerms"
+          [(ngModel)]="formModel.agreeToTerms"
+          #termsCtrl="ngModel"
+          required
+        />
+        I agree to the <a href="#" aria-label="Terms and Conditions">Terms and Conditions</a>
+        <span class="required">*</span>
+      </label>
+      <div class="error-messages" aria-live="polite">
+        @if (termsCtrl.touched && termsCtrl.errors?.['required']) {
+          <span class="error">You must agree to the terms.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Submit / Reset buttons ── -->
+    <div class="form-actions">
+      <!--
+        [disabled]="enrollForm.invalid" — property binding (one-way, component → DOM).
+        Prevents submission when any validator fails.
+      -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="enrollForm.invalid"
+      >
+        Submit Enrollment
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onReset(enrollForm)"
+      >
+        Reset
+      </button>
+    </div>
+
+    <!-- ── Form debug info (development aid) ── -->
+    <div class="form-debug">
+      <small>Form valid: <strong>{{ enrollForm.valid }}</strong></small>
+    </div>
+  </form>
+
+  <!--
+    Hands-On 4 Task 2: success message — shown when submitted === true.
+    Hidden again when Reset is clicked.
+  -->
+  @if (submitted) {
+    <div class="success-message" role="alert">
+      ✅ Enrollment request submitted successfully!
+    </div>
+  }
+</div>

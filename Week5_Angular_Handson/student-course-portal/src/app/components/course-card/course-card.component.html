@@ -1,0 +1,87 @@
+<!-- Hands-On 2 & 3 — CourseCardComponent -->
+@if (course.id) {
+
+  <!--
+    appHighlight directive: adds yellow (or custom colour) bg on mouseenter.
+    [appHighlight]="highlightColor" passes the @Input value to the directive.
+
+    [ngClass]="cardClasses" — ATTRIBUTE DIRECTIVE (object form).
+    Applies 'card--enrolled', 'card--full', 'expanded' classes conditionally.
+    We use the getter cardClasses() to keep this template expression clean.
+
+    [ngStyle]="borderStyle" — ATTRIBUTE DIRECTIVE.
+    Sets a dynamic left border colour based on gradeStatus.
+    Prefer ngClass for static styles; ngStyle is used here because the colour
+    is derived from data and cannot be expressed as a pre-defined CSS class.
+  -->
+  <div
+    class="course-card"
+    [appHighlight]="highlightColor"
+    [ngClass]="cardClasses"
+    [ngStyle]="borderStyle"
+  >
+    <!-- ── Card header: code + grade status badge ── -->
+    <div class="card-header">
+      <span class="course-code">{{ course.code }}</span>
+
+      <!--
+        Hands-On 3 Task 1: *ngSwitch to display different badges per gradeStatus.
+        Each @case renders a distinct styled badge — green/red/grey.
+      -->
+      @switch (course.gradeStatus) {
+        @case ('passed') {
+          <span class="grade-badge passed" role="status">✓ Passed</span>
+        }
+        @case ('failed') {
+          <span class="grade-badge failed" role="status">✗ Failed</span>
+        }
+        @default {
+          <span class="grade-badge pending" role="status">⏳ Pending</span>
+        }
+      }
+    </div>
+
+    <!-- ── Course name (@Input rendered) ── -->
+    <h3 class="course-name">{{ course.name }}</h3>
+
+    <!--
+      Hands-On 3 Task 3: creditLabel custom pipe.
+      {{ course.credits | creditLabel }} transforms: 1 → '1 Credit', 3 → '3 Credits', 0 → 'No Credits'
+    -->
+    <p class="course-credits">{{ course.credits | creditLabel }}</p>
+
+    <!-- ── Expanded details (toggled by Show Details button) ── -->
+    @if (isExpanded) {
+      <div class="course-details">
+        <p><strong>Course ID:</strong> {{ course.id }}</p>
+        <p><strong>Status:</strong> {{ course.gradeStatus }}</p>
+        @if (course.enrolled) {
+          <p class="enrolled-tag">✅ You are enrolled in this course</p>
+        }
+      </div>
+    }
+
+    <!-- ── Actions ── -->
+    <div class="card-actions">
+      <!--
+        Hands-On 3 Task 2: Show Details toggles isExpanded,
+        which triggers the 'expanded' class via cardClasses getter.
+      -->
+      <button class="btn-details" (click)="toggleExpanded()">
+        {{ isExpanded ? 'Hide Details' : 'Show Details' }}
+      </button>
+
+      <!--
+        @Output: emits course.id to the parent CourseListComponent.
+      -->
+      <button
+        class="enroll-btn"
+        (click)="enrollRequested.emit(course.id)"
+        [attr.aria-label]="'Enroll in ' + course.name"
+      >
+        Enroll
+      </button>
+    </div>
+  </div>
+
+}

@@ -1,0 +1,51 @@
+<!-- Hands-On 2 & 3 — CourseListComponent -->
+
+<div class="course-list-container">
+  <h2>Available Courses</h2>
+  <p class="subtitle">Browse and enroll in courses below.</p>
+
+  <!--
+    Hands-On 3 Task 1: *ngIf loading indicator.
+    @if/@else is Angular 17+ control flow syntax (equivalent to *ngIf with else template).
+    isLoading is true for 1.5s (simulated in ngOnInit), then the course grid is shown.
+    Unlike CSS display:none, @if / @else completely removes the element from the DOM.
+  -->
+  @if (isLoading) {
+    <div class="loading-state" role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Loading courses...</p>
+    </div>
+  } @else if (courses.length === 0) {
+    <!--
+      Hands-On 3 Task 1: *ngIf with else — rendered when courses array is empty.
+      This is the #noCourses ng-template equivalent in the new control flow syntax.
+    -->
+    <div class="empty-state">
+      <p>📭 No courses available.</p>
+    </div>
+  } @else {
+    <!--
+      Hands-On 3 Task 1: *ngFor with trackBy.
+      @for is the Angular 17+ equivalent of *ngFor.
+      trackBy: trackByCourseId ensures only changed items are re-rendered.
+
+      Hands-On 3 Task 3: [highlightColor]="'lightyellow'" passes the hover colour
+      to the appHighlight directive inside CourseCardComponent.
+    -->
+    <div class="course-grid">
+      @for (c of courses; track c.id) {
+        <app-course-card
+          [course]="c"
+          [highlightColor]="'lightyellow'"
+          (enrollRequested)="onEnroll($event)"
+        ></app-course-card>
+      }
+    </div>
+
+    @if (selectedCourseId) {
+      <p class="selected-info">
+        ✅ Selected course ID: <strong>{{ selectedCourseId }}</strong>
+      </p>
+    }
+  }
+</div>

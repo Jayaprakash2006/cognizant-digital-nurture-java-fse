@@ -1,0 +1,22 @@
+<!-- Hands-On 1 — StudentProfileComponent -->
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="avatar">
+      {{ student.name.charAt(0) }}
+    </div>
+    <h2>{{ student.name }}</h2>
+    <p class="roll">Roll No: <strong>{{ student.rollNumber }}</strong></p>
+    <p class="email">{{ student.email }}</p>
+
+    <div class="profile-stats">
+      <div class="p-stat">
+        <span class="p-val">{{ student.semester }}</span>
+        <span class="p-lbl">Semester</span>
+      </div>
+      <div class="p-stat">
+        <span class="p-val">{{ student.gpa }}</span>
+        <span class="p-lbl">GPA</span>
+      </div>
+    </div>
+  </div>
+</div>

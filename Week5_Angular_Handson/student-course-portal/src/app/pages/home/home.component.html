@@ -1,0 +1,74 @@
+<!-- Hands-On 1 & 2 — HomeComponent template -->
+
+<div class="home-container">
+
+  <!-- ── Hands-On 1: Welcome heading with string interpolation ── -->
+  <!--
+    {{ portalName }} is INTERPOLATION — one-way binding from component to DOM.
+    Angular evaluates the expression and renders it as text content.
+  -->
+  <h1>{{ portalName }}</h1>
+  <p class="subtitle">
+    Your centralised hub for courses, grades, and academic progress.
+  </p>
+
+  <!-- ── Hands-On 1: Stats row with hardcoded values ── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ coursesAvailable }}</span>
+      <span class="stat-label">Courses Available</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ enrolledCount }}</span>
+      <span class="stat-label">Enrolled</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ gpa }}</span>
+      <span class="stat-label">GPA</span>
+    </div>
+  </div>
+
+  <!-- ── Hands-On 2 Task 1: Property binding + Event binding ── -->
+  <!--
+    [disabled]="!isPortalActive" — PROPERTY BINDING (one-way, component → DOM).
+    The button's disabled attribute is set from the component property.
+    (click)="onEnrollClick()" — EVENT BINDING (DOM event → component method).
+  -->
+  <div class="action-section">
+    <button
+      class="enroll-btn"
+      [disabled]="!isPortalActive"
+      (click)="onEnrollClick()"
+    >
+      Enroll Now
+    </button>
+
+    <!-- Show message after button click (event binding result) -->
+    @if (message) {
+      <p class="message">{{ message }}</p>
+    }
+  </div>
+
+  <!-- ── Hands-On 2 Task 1: Two-way binding with ngModel ── -->
+  <!--
+    [(ngModel)] = TWO-WAY BINDING.
+    Shorthand for: [ngModel]="searchTerm" (ngModelChange)="searchTerm=$event"
+    Changes in the input update `searchTerm` instantly; changes to `searchTerm`
+    in code would also update the input — hence "two-way".
+
+    Compare to [value]="searchTerm" which is ONE-WAY only (DOM doesn't feed back).
+  -->
+  <div class="search-section">
+    <label for="searchInput"><strong>Search Courses:</strong></label>
+    <input
+      id="searchInput"
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Type to search..."
+      class="search-input"
+    />
+    <!-- Live reflection of the two-way bound value -->
+    <p class="search-preview">Searching for: <em>{{ searchTerm }}</em></p>
+  </div>
+
+</div>

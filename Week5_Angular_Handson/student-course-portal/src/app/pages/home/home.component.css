@@ -1,0 +1,121 @@
+/* Hands-On 1 & 2 — Home Page Styles */
+
+.home-container {
+  max-width: 900px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+}
+
+h1 {
+  font-size: 2.2rem;
+  color: #1a237e;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+/* ── Stats Row ── */
+.stats-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 140px;
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 12px rgba(26, 35, 126, 0.3);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  letter-spacing: 0.5px;
+}
+
+/* ── Action Section ── */
+.action-section {
+  margin-bottom: 2rem;
+}
+
+.enroll-btn {
+  background-color: #1a237e;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.enroll-btn:hover:not(:disabled) {
+  background-color: #283593;
+}
+
+.enroll-btn:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 0.75rem;
+  color: #2e7d32;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* ── Search Section ── */
+.search-section {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 500px;
+}
+
+.search-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #3949ab;
+}
+
+.search-preview {
+  margin-top: 0.6rem;
+  color: #555;
+  font-size: 0.9rem;
+}

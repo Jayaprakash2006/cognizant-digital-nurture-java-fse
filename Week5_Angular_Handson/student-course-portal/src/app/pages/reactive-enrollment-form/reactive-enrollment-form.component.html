@@ -1,0 +1,230 @@
+<!-- Hands-On 5 — Reactive Enrollment Form -->
+
+<div class="form-container">
+  <h2>Enrollment Request <span class="badge">Reactive</span></h2>
+  <p class="subtitle">Form structure is defined in TypeScript — fully testable without a DOM.</p>
+
+  <!--
+    [formGroup]="enrollForm" — binds this <form> element to the FormGroup defined in ngOnInit.
+    In reactive forms, the form model lives entirely in TypeScript.
+    The template just reflects the model — NO ngModel directives needed.
+    (ngSubmit)="onSubmit()" — no need to pass the form ref; we access it directly via this.enrollForm.
+  -->
+  <form [formGroup]="enrollForm" (ngSubmit)="onSubmit()" novalidate>
+
+    <!-- ── Student Name ── -->
+    <div class="form-group">
+      <label for="r-studentName">Student Name <span class="required">*</span></label>
+      <!--
+        formControlName="studentName" — binds this input to the 'studentName' FormControl.
+        No [(ngModel)] needed — the FormGroup manages the binding.
+      -->
+      <input
+        id="r-studentName"
+        type="text"
+        formControlName="studentName"
+        placeholder="e.g. Alex Johnson"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid': enrollForm.get('studentName')?.invalid && enrollForm.get('studentName')?.touched,
+          'is-valid':   enrollForm.get('studentName')?.valid   && enrollForm.get('studentName')?.touched
+        }"
+        aria-describedby="r-nameErrors"
+      />
+      <div id="r-nameErrors" class="error-messages" aria-live="polite">
+        @if (enrollForm.get('studentName')?.touched && enrollForm.get('studentName')?.errors?.['required']) {
+          <span class="error">Name is required.</span>
+        }
+        @if (enrollForm.get('studentName')?.touched && enrollForm.get('studentName')?.errors?.['minlength']) {
+          <span class="error">
+            Name must be at least
+            {{ enrollForm.get('studentName')?.errors?.['minlength']?.requiredLength }} characters.
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Student Email (with async validator) ── -->
+    <div class="form-group">
+      <label for="r-studentEmail">Email Address <span class="required">*</span></label>
+      <div class="input-wrapper">
+        <input
+          id="r-studentEmail"
+          type="email"
+          formControlName="studentEmail"
+          placeholder="e.g. alex@college.edu"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': enrollForm.get('studentEmail')?.invalid && enrollForm.get('studentEmail')?.touched,
+            'is-valid':   enrollForm.get('studentEmail')?.valid   && enrollForm.get('studentEmail')?.touched
+          }"
+          aria-describedby="r-emailErrors"
+        />
+        <!-- 'pending' status shown while the async validator is running (800ms delay) -->
+        @if (enrollForm.get('studentEmail')?.pending) {
+          <span class="async-spinner" aria-label="Checking email...">⏳</span>
+        }
+      </div>
+      <div id="r-emailErrors" class="error-messages" aria-live="polite">
+        @if (enrollForm.get('studentEmail')?.touched && enrollForm.get('studentEmail')?.errors?.['required']) {
+          <span class="error">Email is required.</span>
+        }
+        @if (enrollForm.get('studentEmail')?.touched && enrollForm.get('studentEmail')?.errors?.['email']) {
+          <span class="error">Please enter a valid email address.</span>
+        }
+        <!--
+          Async validator error — emailTaken fires after 800ms if email contains 'test@'.
+          Async validators only run after ALL sync validators pass, saving API calls.
+        -->
+        @if (enrollForm.get('studentEmail')?.touched && enrollForm.get('studentEmail')?.errors?.['emailTaken']) {
+          <span class="error">This email is already taken. Try a different one.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Course ID (custom sync validator: noCourseCode) ── -->
+    <div class="form-group">
+      <label for="r-courseId">Course Code <span class="required">*</span></label>
+      <input
+        id="r-courseId"
+        type="text"
+        formControlName="courseId"
+        placeholder="e.g. CS101 (not XX...)"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid': enrollForm.get('courseId')?.invalid && enrollForm.get('courseId')?.touched,
+          'is-valid':   enrollForm.get('courseId')?.valid   && enrollForm.get('courseId')?.touched
+        }"
+        aria-describedby="r-courseErrors"
+      />
+      <div id="r-courseErrors" class="error-messages" aria-live="polite">
+        @if (enrollForm.get('courseId')?.touched && enrollForm.get('courseId')?.errors?.['required']) {
+          <span class="error">Course code is required.</span>
+        }
+        <!--
+          Custom validator error: noCourseCode returns { noCourseCode: true }
+          when the value starts with 'XX'.
+        -->
+        @if (enrollForm.get('courseId')?.touched && enrollForm.get('courseId')?.errors?.['noCourseCode']) {
+          <span class="error">Course codes starting with 'XX' are not allowed.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── Preferred Semester ── -->
+    <div class="form-group">
+      <label for="r-semester">Preferred Semester <span class="required">*</span></label>
+      <select
+        id="r-semester"
+        formControlName="preferredSemester"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid': enrollForm.get('preferredSemester')?.invalid && enrollForm.get('preferredSemester')?.touched,
+          'is-valid':   enrollForm.get('preferredSemester')?.valid   && enrollForm.get('preferredSemester')?.touched
+        }"
+      >
+        <option value="">-- Select Semester --</option>
+        <option value="Odd">Odd</option>
+        <option value="Even">Even</option>
+      </select>
+    </div>
+
+    <!-- ── Agree to Terms (requiredTrue) ── -->
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          formControlName="agreeToTerms"
+        />
+        I agree to the <a href="#" aria-label="Terms and Conditions">Terms and Conditions</a>
+        <span class="required">*</span>
+      </label>
+      <div class="error-messages" aria-live="polite">
+        @if (enrollForm.get('agreeToTerms')?.touched && enrollForm.get('agreeToTerms')?.errors?.['required']) {
+          <span class="error">You must agree to the terms to proceed.</span>
+        }
+      </div>
+    </div>
+
+    <!-- ── FormArray: Additional Courses — Hands-On 5 Task 2 ── -->
+    <div class="form-group">
+      <label>Additional Courses</label>
+      <p class="hint">Optionally add more courses to enroll in.</p>
+
+      <!--
+        formArrayName="additionalCourses" binds this section to the FormArray.
+        Inside it, [formControl] binds each input directly to its FormControl instance.
+      -->
+      <div formArrayName="additionalCourses" class="array-controls">
+        @for (ctrl of additionalCourses.controls; track $index) {
+          <div class="array-row">
+            <input
+              type="text"
+              [formControl]="getCourseControl($index)"
+              placeholder="e.g. CS202"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': getCourseControl($index).invalid && getCourseControl($index).touched,
+                'is-valid':   getCourseControl($index).valid   && getCourseControl($index).touched
+              }"
+              [attr.aria-label]="'Additional course ' + ($index + 1)"
+            />
+            <button
+              type="button"
+              class="btn-remove"
+              (click)="removeCourse($index)"
+              aria-label="Remove course"
+            >
+              ✕
+            </button>
+          </div>
+          @if (getCourseControl($index).touched && getCourseControl($index).errors?.['required']) {
+            <span class="error">Course code cannot be empty.</span>
+          }
+        }
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-add"
+        (click)="addCourse()"
+      >
+        + Add Another Course
+      </button>
+    </div>
+
+    <!-- ── Submit / Reset ── -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="enrollForm.invalid || enrollForm.pending"
+      >
+        @if (enrollForm.pending) {
+          Validating...
+        } @else {
+          Submit Enrollment
+        }
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="onReset()">
+        Reset
+      </button>
+    </div>
+
+    <!-- Debug panel -->
+    <div class="form-debug">
+      <small>
+        Valid: <strong>{{ enrollForm.valid }}</strong> |
+        Pending: <strong>{{ enrollForm.pending }}</strong> |
+        Additional courses: <strong>{{ additionalCourses.length }}</strong>
+      </small>
+    </div>
+  </form>
+
+  @if (submitted) {
+    <div class="success-message" role="alert">
+      ✅ Reactive enrollment request submitted successfully!
+    </div>
+  }
+</div>

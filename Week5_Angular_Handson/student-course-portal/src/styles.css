@@ -1,0 +1,33 @@
+/* Global Styles — Student Course Portal */
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f6fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Angular form validation state classes */
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: red !important;
+}
+
+input.ng-valid.ng-touched,
+select.ng-valid.ng-touched,
+textarea.ng-valid.ng-touched {
+  border-color: green !important;
+}
+
+/* Utility */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
