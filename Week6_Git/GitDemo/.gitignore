@@ -1,0 +1,17 @@
+# Ignore all .log files
+*.log
+
+# Ignore the logs directory
+logs/
+
+# Ignore merge tool backup files
+*.orig
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor files
+.vscode/
+*.swp
+*~

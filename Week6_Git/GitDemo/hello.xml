@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<greetings>
+    <greeting>Hello from GitWork branch</greeting>
+    <greeting>Hello from master branch</greeting>
+    <message>Conflict resolved successfully using 3-way merge</message>
+</greetings>
